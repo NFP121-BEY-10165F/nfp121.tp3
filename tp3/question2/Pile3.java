@@ -8,69 +8,95 @@ import java.util.Vector;
 /**
  * Décrivez votre classe PileVector ici.
  * 
- * @author (votre nom)
- * @version (un numéro de version ou une date)
+ * @FREDERIC khoueiry
+ * @1
  */
 public class Pile3 implements PileI {
 
 	private Vector<Object> v;
-
+        private int capacite;
 	public Pile3() {
-		this(0);
+		this(PileI.CAPACITE_PAR_DEFAUT);
 	}
 
 	public Pile3(int taille) {
-		// traiter le cas <=0
-		// à compléter
-	}
+        if(taille<=0)
+            taille=CAPACITE_PAR_DEFAUT;
+          
+        v=new Vector<Object>();
+        this.capacite=taille;
+        
+    }
 
 	public void empiler(Object o) throws PilePleineException {
-		// à compléter
+	if(this.estPleine())
+            throw new PilePleineException();            
+        v.add(o);
+        capacite--;
 	}
 
 	public Object depiler() throws PileVideException {
-		// à compléter
-		return null;
-	}
+		if(this.estVide())
+            throw new PileVideException();
+        capacite++;
+        Object deleted=v.get(v.size()-1);
+        v.remove(deleted);
+        return deleted;
+    }
 
 	public Object sommet() throws PileVideException {
-		// à compléter
-		return null;
-	}
+		if(this.estVide())
+            throw new PileVideException();
+        return v.get(v.size()-1);
+    }
 
-	public int taille() {
-		// à compléter
-		return -1;
-	}
+    public int taille() {
+        return this.v.size();
+    }
 
-	public int capacite() {
-		// à compléter
-		return -1;
-	}
+    public int capacite() {
+        return capacite;
+    }
 
-	public boolean estVide() {
-		// à compléter
-		return false;
-	}
+    public boolean estVide() {
+        return v.isEmpty();
+    }
 
-	public boolean estPleine() {
-		// à compléter
-		return false;
-	}
+    public boolean estPleine() {
+        return v.size()==capacite;
+    }
 
-	public String toString() {
-		// à compléter
-		return "";
-	}
+    public String toString() {
+        String s = "[";
+       for(int i=v.size()-1;i>0;i--)
+        if(v.get(i)!=null)
+           s+=v.get(i)+ ", ";
+       if(v.get(0)!=null)
+        s+=v.get(0);
+        return s+"]";
+    }
 
-	public boolean equals(Object o) {
-		// à compléter
-		return false;
-	}
+    public boolean equals(Object o) {
+        Pile3 p = (Pile3) o;
+        try{
+            if(p.taille()==this.taille()&&p.capacite()==this.capacite())
+            {
+                for(int i=0;i<this.taille();i++)
+                    if(!p.depiler().equals(this.depiler()))
+                        return false;
+                return true;
+            }
+        }
+        catch(PileVideException exp)
+        {
+           return p.taille()==this.taille()&&p.capacite()==this.capacite();
+        }
+        return false;
+    }
 
-	// fonction fournie
-	public int hashCode() {
-		return toString().hashCode();
-	}
+    // fonction fournie
+    public int hashCode() {
+        return toString().hashCode();
+    }
 
 }

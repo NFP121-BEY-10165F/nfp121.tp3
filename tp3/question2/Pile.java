@@ -6,8 +6,8 @@ import question1.PileVideException;
 /**
  * A remplacer en partie par votre classe Pile de la question 1.
  * 
- * @author (votre nom)
- * @version (un numéro de version ou une date)
+ * @frederic khoueiry
+ * @1.0
  */
 public class Pile implements PileI {
 
@@ -15,50 +15,68 @@ public class Pile implements PileI {
     private int ptr;
 
     public Pile(int taille) {
-        // traiter le cas <=0
-        // a completer
+                if (taille < 0)
+            taille = CAPACITE_PAR_DEFAUT;
+        this.zone = new Object[taille];
+        this.ptr = 0;
     }
 
     public Pile() {
-        this(0);
+        this(PileI.CAPACITE_PAR_DEFAUT);
     }
 
     public void empiler(Object o) throws PilePleineException {
-        // a completer
+        if (estPleine())
+            throw new PilePleineException();
+        this.zone[this.ptr] = o;
+        this.ptr++;
     }
 
     public Object depiler() throws PileVideException {
-        // a completer
-        return null;
+        if (estVide())
+            throw new PileVideException();
+        this.ptr--;
+        return zone[ptr];
     }
 
     public Object sommet() throws PileVideException {
-        // a completer
-        return null;
+         if (estVide())
+            throw new PileVideException();
+
+        return zone[ptr-1] ;
     }
 
     public int capacite() {
-        // a completer
-        return -1;
-    }
+        return zone.length-ptr;}
 
     public int taille() {
-        // a completer
-        return -1;
+        return ptr;
     }
 
     public boolean estVide() {
-        // a completer
-        return false;
+        return ptr == 0;
     }
 
     public boolean estPleine() {
-        // a completer
-        return false;
+        return ptr == zone.length;
     }
 
     public boolean equals(Object o) {
-        // a completer
+        if(!(o instanceof Pile))
+            return false;
+        
+        Pile pi = (Pile)o;
+
+        if (pi.taille() == this.taille() && pi.capacite() == this.capacite()){
+            for(int i=0; i <zone.length; i++){
+                Object tmp = zone[i];
+                for(int j =0; j<pi.zone.length; j++){
+                    if(tmp != pi.zone[i]&&j==pi.zone.length-1)
+                        return false;
+                }
+            }
+            return true;
+        }                
         return false;
     }
 
@@ -68,7 +86,12 @@ public class Pile implements PileI {
     }
 
     public String toString() {
-        // a completer
-        return null;
+       String s = "[";
+       for(int i=zone.length-1;i>0;i--)
+         if(zone[i]!=null)
+           s+=zone[i]+ ", ";
+       if(zone[0]!=null)
+        s+=zone[0];
+        return s+"]";
     }
 }
